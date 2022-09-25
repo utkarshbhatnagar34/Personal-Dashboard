@@ -25,11 +25,11 @@ fetch(codeApi)
   .then(function (response) {
     return response.json();
   })
-  .then((data)=> {
+  .then((data) => {
     console.log(data);
     let output = "";
-    let contestArr =[];
-    for(let i = 0; i < Math.min(5, (data.result.length)); i++){
+    let contestArr = [];
+    for (let i = 0; i < Math.min(3, (data.result.length)); i++) {
       contestArr.push(data.result[i]);
     }
     console.log(contestArr);
@@ -38,17 +38,25 @@ fetch(codeApi)
       contest.startTimeSeconds = new Date(contest.startTimeSeconds * 1000).toLocaleTimeString();
       contest.durationSeconds = contest.durationSeconds / 3600;
       output += `
-      
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">${contest.name}</h5>
-          <p class="card-start">Start Time: ${contest.startTimeSeconds}</p>
-          <p class="card-duration">Duration: ${contest.durationSeconds} hr</p>
+
+<div class="card">
+    <div class="content">
+        <div class="contentBx">
+            <h3 class="card-title">${contest.name}</h3>
+            <p class="card-start">Start Time: ${contest.startTimeSeconds}</p>
+            <br>
         </div>
-      </div>
+        <div class="sci">
+            <p class="card-duration">Duration: ${contest.durationSeconds} hr
+                <a href="https://codeforces.com/contests">Codeforce</a>
+            </p>
+        </div>
+    </div>
+</div>
+
       `;
     });
-    document.querySelector(".lside").innerHTML = output;
+    document.querySelector(".container").innerHTML = output;
   })
 
 
@@ -63,21 +71,21 @@ const apiImage = {
 }
 let endpoint = 'https://api.unsplash.com/photos/random/?client_id=us8K1PeIvZ2YkePSsFCgwsQeDYi58VMLHmpJtI7Kvuw'
 
-//  enable below to use unsplash random image
-// fetch(endpoint)
-//   .then(function (response) {
-//     return response.json();
-//   })
-//   .then(function (jsonData) {
-//     console.log(jsonData),
-//       link = jsonData.urls.full,
-//       console.log(link);
-//       image.style.backgroundImage = "url(" + link + ")";
-//   })
 
-  // End
+fetch(endpoint)
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (jsonData) {
+    console.log(jsonData),
+      link = jsonData.urls.full,
+      console.log(link);
+      image.style.backgroundImage = "url(" + link + ")";
+  })
 
-  // Weather start
+// End
+
+// Weather start
 const api = {
   key: "92f79e1e19d94f3be7cd1a2ac6fd588e",
   base: "https://api.openweathermap.org/data/2.5/"

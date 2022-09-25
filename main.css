@@ -8,7 +8,9 @@ body {
   font-family: 'montserrat', sans-serif;
   background-size: cover;
   background-position: top center;
+  flex-wrap: wrap;
 }
+
 /* grid */
 .main {
   display: grid;
@@ -18,21 +20,103 @@ body {
   grid-row-gap: 0px;
   grid-template-areas: "lside app rside ";
   min-height: 100vh;
-    background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
+  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
 }
 
-/*  */
-.lside{
-  grid-area: lside;
-
-}
 
 .app-wrap {
   grid-area: app;
   display: flex;
   flex-direction: column;
 }
-.rside{
+
+/* Card css */
+
+.container {
+  grid-area: lside;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 40px 0;
+  text-transform: capitalize;
+  text-align: center;
+}
+
+.container .card {
+  position: relative;
+  width: 23vw;
+  height: 25vh;
+  background: rgba(255, 255, 255, 0.05);
+  margin: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(10px);
+}
+
+.container .card .content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transition: 0.5s;
+}
+
+.container .card:hover .content {
+  transform: translateY(-10px);
+}
+
+.container .card .content .contentBx h3 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 500;
+  font-size: 18px;
+  text-align: center;
+  margin: 20px 0 10px;
+  line-height: 1.1em;
+}
+
+.container .card .content .contentBx h3 span {
+  font-size: 12px;
+  font-weight: 300;
+  text-transform: initial;
+}
+
+.container .card .sci {
+  bottom: 20px;
+  display: flex;
+}
+
+.container .card .sci p {
+  list-style: none;
+  margin: 0 10px;
+  transform: translateY(0px);
+  transition: 0.5s;
+  opacity: 0;
+}
+
+.container .card:hover .sci p {
+  transform: translateY(0px);
+  opacity: 1;
+}
+
+.container .card .sci p a {
+  color: #fff;
+  font-size: 20px;
+  text-decoration: none;
+  
+}
+
+/* card css end */
+
+.rside {
   grid-area: rside;
 }
 
