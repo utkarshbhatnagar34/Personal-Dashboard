@@ -1,7 +1,5 @@
 // Get Time 
-
-window.addEventListener("DOMContentLoaded", showTime());
-function showTime() {
+const showTime=()=> {
   //date object
   let date = new Date();
   let time = date.toLocaleTimeString('en-US', {
@@ -11,6 +9,7 @@ function showTime() {
   document.getElementById("displayClock").innerHTML = time;
   setTimeout(showTime, 1000);
 }
+document.addEventListener("DOMContentLoaded", showTime());
 // End time
 
 // Start Codeforces latest contest list
@@ -21,43 +20,80 @@ function showTime() {
 //  relativeTimeSeconds
 const codeApi = "https://codeforces.com/api/contest.list?gym=false";
 
-fetch(codeApi)
-  .then(function (response) {
-    return response.json();
-  })
-  .then((data) => {
-    console.log(data);
-    let output = "";
-    let contestArr = [];
-    for (let i = 0; i < Math.min(3, (data.result.length)); i++) {
-      contestArr.push(data.result[i]);
-    }
-    console.log(contestArr);
+const codeForce = async() => {
+  const response = await fetch(codeApi);
+  const data = await response.json();
+  // const codeData = data.result;
+  let output = "";
+  let contestArr = [];
+  for (let i = 0; i < Math.min(3, (data.result.length)); i++) {
+    contestArr.push(data.result[i]);
+  }
+  console.log(contestArr);
 
-    contestArr.forEach(function (contest) {
-      contest.startTimeSeconds = new Date(contest.startTimeSeconds * 1000).toLocaleTimeString();
-      contest.durationSeconds = contest.durationSeconds / 3600;
-      output += `
-
-<div class="card">
-    <div class="content">
-        <div class="contentBx">
-            <h3 class="card-title">${contest.name}</h3>
-            <p class="card-start">Start Time: ${contest.startTimeSeconds}</p>
-            <br>
-        </div>
-        <div class="sci">
-            <p class="card-duration">Duration: ${contest.durationSeconds} hr
-                <a href="https://codeforces.com/contests">Codeforce</a>
-            </p>
-        </div>
-    </div>
-</div>
-
+  contestArr.forEach((contest)=> {
+    contest.startTimeSeconds = new Date(contest.startTimeSeconds * 1000).toLocaleTimeString();
+    contest.durationSeconds = contest.durationSeconds / 3600;
+    output += `
+      <div class="card">
+          <div class="content">
+              <div class="contentBx">
+                  <h3 class="card-title">${contest.name}</h3>
+                  <p class="card-start">Start Time: ${contest.startTimeSeconds}</p>
+                  <br>
+              </div>
+              <div class="sci">
+                  <p class="card-duration">Duration: ${contest.durationSeconds} hr
+                      <a href="https://codeforces.com/contests">Codeforce</a>
+                  </p>
+              </div>
+          </div>
+      </div>
       `;
-    });
-    document.querySelector(".container").innerHTML = output;
-  })
+  });
+  document.querySelector(".container").innerHTML = output;
+};
+codeForce();
+
+  
+// using fetch api
+// fetch(codeApi)
+//   .then(function (response) {
+//     return response.json();
+//   })
+//   .then((data) => {
+//     console.log(data);
+//     let output = "";
+//     let contestArr = [];
+//     for (let i = 0; i < Math.min(3, (data.result.length)); i++) {
+//       contestArr.push(data.result[i]);
+//     }
+//     console.log(contestArr);
+
+//     contestArr.forEach(function (contest) {
+//       contest.startTimeSeconds = new Date(contest.startTimeSeconds * 1000).toLocaleTimeString();
+//       contest.durationSeconds = contest.durationSeconds / 3600;
+//       output += `
+
+// <div class="card">
+//     <div class="content">
+//         <div class="contentBx">
+//             <h3 class="card-title">${contest.name}</h3>
+//             <p class="card-start">Start Time: ${contest.startTimeSeconds}</p>
+//             <br>
+//         </div>
+//         <div class="sci">
+//             <p class="card-duration">Duration: ${contest.durationSeconds} hr
+//                 <a href="https://codeforces.com/contests">Codeforce</a>
+//             </p>
+//         </div>
+//      </div>
+// </div>
+
+//       `;
+//     });
+//     document.querySelector(".container").innerHTML = output;
+//   })
 
 
 // End codeforces latest contest list
@@ -70,19 +106,32 @@ const apiImage = {
   clientID: "us8K1PeIvZ2YkePSsFCgwsQeDYi58VMLHmpJtI7Kvuw"
 }
 let endpoint = 'https://api.unsplash.com/photos/random/?client_id=us8K1PeIvZ2YkePSsFCgwsQeDYi58VMLHmpJtI7Kvuw'
+  
+// enable for unsplash
 
+// Using async and await
+async function getBackkgroudImage() {
+  try{
+    const response = await fetch(endpoint);
+    const data = await response.json();
+    image.style.backgroundImage = `url(${data.urls.full})`;
+  }catch(error){
+    console.log(error);
+  }
+}
+getBackkgroudImage();
 
-fetch(endpoint)
-  .then(function (response) {
-    return response.json();
-  })
-  .then(function (jsonData) {
-    console.log(jsonData),
-      link = jsonData.urls.full,
-      console.log(link);
-      image.style.backgroundImage = "url(" + link + ")";
-  })
-
+// using fetch api
+// fetch(endpoint)
+//   .then(function (response) {
+//     return response.json();
+//   })
+//   .then(function (jsonData) {
+//     console.log(jsonData),
+//       link = jsonData.urls.full,
+//       console.log(link);
+//       image.style.backgroundImage = "url(" + link + ")";
+//   })
 // End
 
 // Weather start
@@ -97,14 +146,26 @@ searchbox.addEventListener('keypress', setQuery);
 function setQuery(evt) {
   if (evt.keyCode == 13) {
     getResults(searchbox.value);
-  }
+  } 
 }
 
-function getResults(query) {
-  fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
-    .then(weather => {
-      return weather.json();
-    }).then(displayResults);
+// function getResults(query) {
+//   fetch(`${api.base}weather?q=${query}&units=metric&APPID=${api.key}`)
+//     .then(weather => {
+//       return weather.json();
+//     }).then(displayResults);
+// }
+
+const getResults = async(query)=> {
+  let url = `${api.base}weather?q=${query}&units=metric&APPID=${api.key}`;
+  try {
+    const response = await fetch(url);
+    const weather = await response.json();
+    console.log(weather);
+    displayResults(weather);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function displayResults(weather) {
@@ -136,3 +197,32 @@ function dateBuilder(d) {
 
   return `${day} ${date} ${month} ${year}`;
 }
+
+
+const showLatestWeather = async () => {
+  let url = `${api.base}weather?q=Kolkata&units=metric&APPID=${api.key}`;
+  try {
+    const response = await fetch(url);
+    const weather = await response.json();
+    displayResults(weather);
+  } catch (error) {
+    console.log(error);
+  }
+}
+document.addEventListener("DOMContentLoaded", showLatestWeather());
+
+
+// Get google tasks
+// const googleTasksApi = require('google-tasks-api')
+
+// const apiTask = {
+//   client:"104525583009-jtevvhpkkt96ffhrfqc86pta155avbsn.apps.googleusercontent.com",
+// }
+
+// async function getTasks() {
+//   await googleTasksApi.autorize(apiTask.client);
+//   const response = await listTaskLists();
+//   const data = await response.json();
+//   console.log(data);
+// }
+// getTasks();
